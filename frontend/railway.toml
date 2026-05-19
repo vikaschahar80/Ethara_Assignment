@@ -1,0 +1,8 @@
+# Railway deployment config for the FRONTEND service
+[build]
+builder = "nixpacks"
+buildCommand = "npm run build"
+
+[deploy]
+startCommand = "npx serve dist -s -l 3000"
+restartPolicyType = "on-failure"
