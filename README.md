@@ -2,9 +2,6 @@
 
 A full-stack team task management application with role-based access control, Kanban boards, and real-time dashboards.
 
-## 🌐 Live Demo
-> [https://your-frontend-url.railway.app](https://your-frontend-url.railway.app)
-
 ## 📦 Tech Stack
 
 | Layer | Technology |
@@ -121,86 +118,6 @@ npm run dev             # Starts on :5173
 ```
 
 ---
-
-## 🚂 Railway Deployment
-
-### Step 1 — Push to GitHub
-```bash
-cd /path/to/Assignment4
-git init
-git add .
-git commit -m "Initial commit"
-git remote add origin https://github.com/YOUR_USERNAME/task-manager.git
-git push -u origin main
-```
-
-### Step 2 — Create Railway Project
-1. Go to [railway.app](https://railway.app) → **New Project**
-2. **Add a PostgreSQL** plugin — Railway auto-creates `DATABASE_URL`
-
-### Step 3 — Deploy Backend
-1. **New Service** → Deploy from GitHub → select your repo
-2. Set **Root Directory** to `backend`
-3. Add Environment Variables:
-   ```
-   DATABASE_URL=<auto-filled by Railway Postgres plugin>
-   JWT_SECRET=your-random-32-char-secret
-   JWT_EXPIRES_IN=7d
-   NODE_ENV=production
-   FRONTEND_URL=https://your-frontend-url.railway.app
-   PORT=5000
-   ```
-4. Railway will run `npx prisma migrate deploy && node src/index.js`
-
-### Step 4 — Deploy Frontend
-1. **New Service** → Deploy from GitHub → same repo
-2. Set **Root Directory** to `frontend`
-3. Add Environment Variables:
-   ```
-   VITE_API_URL=https://your-backend-url.railway.app/api
-   ```
-4. Railway will run `npm run build` then serve with `serve dist`
-
-### Step 5 — Verify
-Visit your frontend Railway URL → signup → create a project → add tasks!
-
----
-
-## 🎨 Screenshots
-
-> Add screenshots of your Dashboard, Project Kanban board, and Login page here.
-
----
-
-## 👤 Test Accounts
-
-After deploying, create test accounts via the Signup page:
-
-| Name | Email | Password | Role |
-|------|-------|----------|------|
-| Admin User | admin@test.com | admin123 | Admin |
-| Member User | member@test.com | member123 | Member |
-
----
-
-## 📝 Database Schema
-
-```prisma
-User         → id, name, email, passwordHash, role (ADMIN/MEMBER)
-Project      → id, name, description, ownerId
-ProjectMember → projectId, userId, role (ADMIN/MEMBER)
-Task         → id, title, description, status, priority, dueDate, 
-               projectId, assigneeId, createdById
-```
-
----
-
-## 🛡️ Security
-- Passwords hashed with **bcrypt** (12 rounds)
-- JWTs expire after **7 days**
-- All routes protected with JWT middleware
-- Input validation via **express-validator** on all POST/PUT routes
-- CORS restricted to frontend URL in production
 
 ---
 
