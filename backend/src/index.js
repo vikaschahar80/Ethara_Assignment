@@ -16,9 +16,34 @@ const app = express();
 app.use(helmet({
   contentSecurityPolicy: false,
 }));
-const frontendUrl = process.env.FRONTEND_URL ? process.env.FRONTEND_URL.replace(/['"]/g, '').trim() : '*';
+const allowedOrigins = [
+  'https://ethara-assignment-alpha.vercel.app',
+  'http://localhost:5173',
+  'http://localhost:3000'
+];
+
 app.use(cors({
-  origin: frontendUrl,
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps, curl, or server-to-server)
+    if (!origin) return callback(null, true);
+    
+    const cleanOrigin = origin.replace(/\/$/, '').trim();
+    
+    // Match configured FRONTEND_URL environment variable
+    const configuredUrl = process.env.FRONTEND_URL 
+      ? process.env.FRONTEND_URL.replace(/['"]/g, '').replace(/\/$/, '').trim() 
+      : '';
+      
+    if (
+      cleanOrigin === configuredUrl ||
+      allowedOrigins.includes(cleanOrigin) ||
+      cleanOrigin.endsWith('.vercel.app') // Support all Vercel production and preview subdomains
+    ) {
+      return callback(null, true);
+    }
+    
+    return callback(new Error('Not allowed by CORS'));
+  },
   credentials: true,
   optionsSuccessStatus: 200
 }));
