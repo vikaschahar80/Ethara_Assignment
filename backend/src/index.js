@@ -13,7 +13,9 @@ const dashboardRoutes = require('./routes/dashboard');
 const app = express();
 
 // ─── Middleware ───────────────────────────────────────────────────────────────
-app.use(helmet());
+app.use(helmet({
+  contentSecurityPolicy: false,
+}));
 const frontendUrl = process.env.FRONTEND_URL ? process.env.FRONTEND_URL.replace(/['"]/g, '').trim() : '*';
 app.use(cors({
   origin: frontendUrl,
@@ -24,6 +26,7 @@ app.use(morgan('dev'));
 app.use(express.json());
 
 // ─── Routes ───────────────────────────────────────────────────────────────────
+app.get('/', (req, res) => res.json({ message: '🚀 Ethara Assignment API is running!' }));
 app.use('/api/auth', authRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/tasks', taskRoutes);
